@@ -6,7 +6,7 @@ import org.bonitasoft.console.common.server.page.PageContext
 import org.bonitasoft.console.common.server.page.PageController
 import org.bonitasoft.console.common.server.page.PageResourceProvider
 
-import com.bonitasoft.engine.api.TenantAPIAccessor;
+import org.bonitasoft.engine.api.TenantAPIAccessor;
 import org.bonitasoft.engine.session.APISession;
 import org.bonitasoft.engine.api.IdentityAPI;
 import org.bonitasoft.engine.api.CommandAPI;
