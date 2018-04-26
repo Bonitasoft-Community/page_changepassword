@@ -57,9 +57,11 @@ appCommand.controller('ChangePasswordController',
 
 				this.setMessage("Change in progress...",0);
 				var me = this;
+				var passwordEncoded=encodeURIComponent(this.pass.pass1);
+				
 				$.ajax({
 					method : 'GET',
-					url : '?page=custompage_changepassword&action=changepassword&password='+this.pass.pass1,
+					url : '?page=custompage_changepassword&action=changepassword&password='+ passwordEncoded,
 					data : this.pass1,
 					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 					success : function ( result ) {

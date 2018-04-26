@@ -6,7 +6,7 @@ import org.bonitasoft.console.common.server.page.PageContext
 import org.bonitasoft.console.common.server.page.PageController
 import org.bonitasoft.console.common.server.page.PageResourceProvider
 
-import com.bonitasoft.engine.api.TenantAPIAccessor;
+import org.bonitasoft.engine.api.TenantAPIAccessor;
 import org.bonitasoft.engine.session.APISession;
 import org.bonitasoft.engine.api.IdentityAPI;
 import org.bonitasoft.engine.api.CommandAPI;
@@ -22,6 +22,9 @@ import org.json.simple.JSONObject;
 
 public class Index implements PageController {
 
+	private static String pageName="changepassword";
+	private static Logger logger= Logger.getLogger("org.bonitasoft.custompage."+pageName+".groovy");
+
 		@Override
 		public void doGet(HttpServletRequest request, HttpServletResponse response, PageResourceProvider pageResourceProvider, PageContext pageContext) {
 
@@ -34,9 +37,9 @@ public class Index implements PageController {
 				PrintWriter out = response.getWriter()
 
 				String action=request.getParameter("action");
-				logger.severe("###################################### YES action is["+action+"] page=["+request.getParameter("page")+"] !");
+				logger.info("CustomPage:action ["+action+"] !");
 				if (action==null || action.length()==0 ) {
-						logger.severe("###################################### RUN Default !");
+						// logger.severe("###################################### RUN Default !");
 
 						runTheBonitaIndexDoGet( request, response,pageResourceProvider,pageContext);
 						return;
@@ -52,8 +55,10 @@ public class Index implements PageController {
 				
 				else if ("changepassword".equals(action)) {
 						
-						String password=request.getParameter("password");
-
+						String passwordUri=request.getParameter("password");
+						String password = (passwordUri==null ? null : java.net.URLDecoder.decode(passwordUri, "UTF-8"));
+						// logger.info("CustomPage:action ChangePassword to ["+password+"] !");
+				
 						try{
 								UserUpdater updateDescriptor = new UserUpdater();
 								updateDescriptor.setPassword(password);
@@ -93,18 +98,22 @@ public class Index implements PageController {
 								indexContent = s.getText()
 						}
 
-						def String pageResource="pageResource?&page="+ request.getParameter("page")+"&location=";
+						// String pageResource="pageResource?&page="+ request.getParameter("page")+"&location=";
 						// 7.0 Living update does not need that
 						// indexContent= indexContent.replace("@_USER_LOCALE_@", request.getParameter("locale"));
 						// indexContent= indexContent.replace("@_PAGE_RESOURCE_@", pageResource);
 
+						indexContent= indexContent.replace("@_CURRENTTIMEMILIS_@", String.valueOf(System.currentTimeMillis()));
+
+						
 						response.setCharacterEncoding("UTF-8");
 						PrintWriter out = response.getWriter();
 						out.print(indexContent);
 						out.flush();
 						out.close();
 				} catch (Exception e) {
-						e.printStackTrace();
+					logger.severe("CustomPageChangepassword:Exception  "+e.getMessage());
+
 				}
 		}
 }
