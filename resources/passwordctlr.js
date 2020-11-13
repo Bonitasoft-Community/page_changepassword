@@ -20,6 +20,7 @@ appCommand.constant('RESOURCE_PATH', 'pageResource?page=custompage_cmdmanage&loc
 appCommand.controller('ChangePasswordController', ['$cookies', 
 	function ($cookies) { 
      
+		this.showError = 0;
 		this.showErrorBadPassword = 0;
 		this.showMessage=0;
 		this.message='Type your password twice';
@@ -31,11 +32,12 @@ appCommand.controller('ChangePasswordController', ['$cookies',
 
 		this.setMessage = function (message, error)
 		{
-			this.showMessage=0;
+			this.showMessage = 0;
+			this.showError = 0;
 			this.showErrorBadPassword=0;
-			if (error ==1)
+			if (error == 1)
 			{
-				this.showErrorBadPassword=1;
+				this.showError = 1;
 			}
 			else 
 			{
@@ -45,6 +47,7 @@ appCommand.controller('ChangePasswordController', ['$cookies',
 		};
 	   this.changePassword = function ()
 		{
+			this.showError=0;
 			this.showErrorBadPassword=0;
 			this.showMessage=0;
 			this.message= "";

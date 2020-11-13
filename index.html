@@ -43,7 +43,8 @@
 					</tr>
 					<tr>
 					<td colspan="2">
-						<span ng-show="ctrlPassword.showErrorBadPassword == 1" style="color:red;">Passwords do not match</span>
+            <span ng-show="ctrlPassword.showErrorBadPassword == 1" style="color:red;">Passwords do not match</span>
+						<span ng-show="ctrlPassword.showError == 1" style="color:red;">{{ctrlPassword.message}}</span>
 						<span ng-show="ctrlPassword.showMessage == 1" style="color:blue;">{{ctrlPassword.message}}</span>
 						</td>
 					</tr>
