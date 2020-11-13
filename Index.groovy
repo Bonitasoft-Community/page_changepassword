@@ -50,6 +50,9 @@ public class Index implements PageController {
 				IdentityAPI identityApi = TenantAPIAccessor.getIdentityAPI(ApiSession);
 				String statusChange="badAction";
 
+				//Make sure no action is executed if the CSRF protection is active and the request header is invalid
+				TokenValidator.checkCSRFToken(request, response);
+
 				if ("ping".equals(action)) {
 					statusChange="ping userId["+ApiSession.getUserId()+"]";
 				}

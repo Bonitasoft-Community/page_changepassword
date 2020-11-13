@@ -8,7 +8,7 @@
 // var appCommand = angular.module('bonitacommands', ['ui.bootstrap']);
 
 
-var appCommand = angular.module('changepassword', ['ui.bootstrap']);
+var appCommand = angular.module('changepassword', ['ui.bootstrap', 'ngCookies']);
 
 
 
@@ -17,9 +17,10 @@ var appCommand = angular.module('changepassword', ['ui.bootstrap']);
 // Constant used to specify resource base path (facilitates integration into a Bonita custom page)
 appCommand.constant('RESOURCE_PATH', 'pageResource?page=custompage_cmdmanage&location=');
 
-appCommand.controller('ChangePasswordController',
-	function () { 
+appCommand.controller('ChangePasswordController', ['$cookies', 
+	function ($cookies) { 
      
+		this.showError = 0;
 		this.showErrorBadPassword = 0;
 		this.showMessage=0;
 		this.message='Type your password twice';
@@ -31,11 +32,12 @@ appCommand.controller('ChangePasswordController',
 
 		this.setMessage = function (message, error)
 		{
-			this.showMessage=0;
+			this.showMessage = 0;
+			this.showError = 0;
 			this.showErrorBadPassword=0;
-			if (error ==1)
+			if (error == 1)
 			{
-				this.showErrorBadPassword=1;
+				this.showError = 1;
 			}
 			else 
 			{
@@ -45,6 +47,7 @@ appCommand.controller('ChangePasswordController',
 		};
 	   this.changePassword = function ()
 		{
+			this.showError=0;
 			this.showErrorBadPassword=0;
 			this.showMessage=0;
 			this.message= "";
@@ -59,8 +62,14 @@ appCommand.controller('ChangePasswordController',
 				var me = this;
 				var passwordEncoded=encodeURIComponent(this.pass.pass1);
 				
+				var csrfToken = $cookies['X-Bonita-API-Token'];
+				var additionalHeaders = {};
+				if (csrfToken) {
+					additionalHeaders ['X-Bonita-API-Token'] = csrfToken;
+				}
 				$.ajax({
 					method : 'GET',
+					headers: additionalHeaders,
 					url : '?page=custompage_changepassword&action=changepassword&password='+ passwordEncoded,
 					data : this.pass1,
 					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -80,7 +89,7 @@ appCommand.controller('ChangePasswordController',
 		};
 	
 
-	});
+	}]);
 
 	   
 	
