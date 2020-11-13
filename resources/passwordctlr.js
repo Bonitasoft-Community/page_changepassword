@@ -8,7 +8,7 @@
 // var appCommand = angular.module('bonitacommands', ['ui.bootstrap']);
 
 
-var appCommand = angular.module('changepassword', ['ui.bootstrap']);
+var appCommand = angular.module('changepassword', ['ui.bootstrap', 'ngCookies']);
 
 
 
@@ -17,8 +17,8 @@ var appCommand = angular.module('changepassword', ['ui.bootstrap']);
 // Constant used to specify resource base path (facilitates integration into a Bonita custom page)
 appCommand.constant('RESOURCE_PATH', 'pageResource?page=custompage_cmdmanage&location=');
 
-appCommand.controller('ChangePasswordController',
-	function () { 
+appCommand.controller('ChangePasswordController', ['$cookies', 
+	function ($cookies) { 
      
 		this.showErrorBadPassword = 0;
 		this.showMessage=0;
@@ -59,8 +59,14 @@ appCommand.controller('ChangePasswordController',
 				var me = this;
 				var passwordEncoded=encodeURIComponent(this.pass.pass1);
 				
+				var csrfToken = $cookies['X-Bonita-API-Token'];
+				var additionalHeaders = {};
+				if (csrfToken) {
+					additionalHeaders ['X-Bonita-API-Token'] = csrfToken;
+				}
 				$.ajax({
 					method : 'GET',
+					headers: additionalHeaders,
 					url : '?page=custompage_changepassword&action=changepassword&password='+ passwordEncoded,
 					data : this.pass1,
 					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -80,7 +86,7 @@ appCommand.controller('ChangePasswordController',
 		};
 	
 
-	});
+	}]);
 
 	   
 	
